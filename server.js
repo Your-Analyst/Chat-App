@@ -1,9 +1,9 @@
 // server.js
-const express = require('express');
-const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
 const { Server } = require('socket.io');
+const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -35,5 +35,5 @@ io.on('connection', (socket) => {
 
 //Listen on Provided PORT
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running on ${PORT}`);
+  console.log(`Server is running on https://localhost:${PORT}`);
 });
