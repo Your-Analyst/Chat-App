@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 // Create HTTPS server
-const server = http.createServer(options, app);
+const server = http.createServer(app);
 const io = new Server(server);
 
 io.on('connection', (socket) => {
