@@ -18,7 +18,7 @@ body {
   background: white;
   border: 1px solid #bfbf97;
   border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(191, 191, 151, 0.2);
   overflow: hidden;
 }
 
@@ -41,8 +41,8 @@ body {
 #form {
   display: flex;
   padding: 10px;
-  border-top: 1px solid #ddd;
-  background-color: #f9f9f9;
+  border-top: 1px solid #bfbf97;
+  background-color: #d5dba9;
 }
 
 #input {
@@ -50,7 +50,7 @@ body {
   padding: 10px;
   margin-right: 10px;
   border-radius: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid #d5dba9;
 }
 
 #send-button {
