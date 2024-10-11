@@ -33,7 +33,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
-});
 
 //Listen on Provided PORT
 server.listen(PORT, '0.0.0.0', () => {
