@@ -1,43 +1,59 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat App</title>
-  <script src="/socket.io/socket.io.js"></script>
-  <style>
-    /* Basic styling */
-    body { font: 14px lato; background-color: #b1c293; margin: 0; padding: 10px; }
-    ul { list-style-type: none; padding: 0; }
-    li { padding: 8px; margin-bottom: 10px; background-color: #e5e6d1; border-radius: 5px; }
-    input { padding: 10px; margin-right: 10px; }
-  </style>
+  <!-- Link to the external CSS file -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <ul id="messages"></ul>
-  <form id="form" action="">
-    <input id="input" autocomplete="off" placeholder="Type a message..." />
-    <button>Send</button>
-  </form>
+  <div id="chat-container">
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" placeholder="Type a message..." />
+      <button id="send-button">Send</button>
+    </form>
+  </div>
 
+  <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io();
+
+    // Prompt user for a username when they join
+    var username = prompt("Enter your username:");
+    if (!username) {
+      username = "Anonymous";
+    }
+
     var form = document.getElementById('form');
     var input = document.getElementById('input');
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       if (input.value) {
-        socket.emit('chat message', input.value);
+        // Emit the message along with the username
+        socket.emit('chat message', { user: username, message: input.value });
         input.value = '';
       }
     });
 
-    socket.on('chat message', function(msg) {
+    socket.on('chat message', function(data) {
       var item = document.createElement('li');
-      item.textContent = msg;
+      item.textContent = `[${data.timestamp}] ${data.user}: ${data.message}`;
       document.getElementById('messages').appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });
+
+    // Listen for connection messages from the server
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    // Automatically scroll to the bottom when a new message arrives
+    var messages = document.getElementById('messages');
+    messages.scrollTop = messages.scrollHeight;
   </script>
 </body>
 </html>
+
