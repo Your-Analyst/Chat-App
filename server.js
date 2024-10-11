@@ -9,10 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Read SSL certificate and key
-const options = {
-  key: fs.readFileSync(path.join(__dirname, 'server.key')),
-  cert: fs.readFileSync(path.join(__dirname, 'server.cert')),
-};
+//const options = {
+  //key: fs.readFileSync(path.join(__dirname, 'server.key')),
+  //cert: fs.readFileSync(path.join(__dirname, 'server.cert')),
+//};
 
 // Serve index.html
 app.get('/', (req, res) => {
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 // Create HTTPS server
-const server = https.createServer(options, app);
+const server = http.createServer(options, app);
 const io = new Server(server);
 
 io.on('connection', (socket) => {
@@ -35,5 +35,5 @@ io.on('connection', (socket) => {
 
 //Listen on Provided PORT
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running on https://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
