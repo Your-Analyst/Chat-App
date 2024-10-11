@@ -34,6 +34,6 @@ io.on('connection', (socket) => {
 });
 
 //Listen on Provided PORT
-server.listen(PORT, () => {
-  console.log(`Server is running on https://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on ${PORT}`);
 });
