@@ -6,7 +6,7 @@ const path = require('path');
 const { Server } = require('socket.io');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Read SSL certificate and key
 const options = {
@@ -33,6 +33,7 @@ io.on('connection', (socket) => {
   });
 });
 
+//Listen on Provided PORT
 server.listen(PORT, () => {
   console.log(`Server is running on https://localhost:${PORT}`);
 });
