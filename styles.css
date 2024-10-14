@@ -1,3 +1,11 @@
+h1 {
+   text-align: center;
+   background-color: #ACAF50;
+   color: white;
+   padding: 10px 0;
+   margin-bottom: 20px;
+}
+
 body {
   font-family: Lato, sans-serif;
   background-color: #d5dba9;
@@ -20,6 +28,7 @@ body {
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(191, 191, 151, 0.2);
   overflow: hidden;
+  margin-top: 30px;
 }
 
 #messages {
