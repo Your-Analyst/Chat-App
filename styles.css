@@ -1,9 +1,9 @@
 h1 {
    text-align: center;
-   background-color: #ACAF50;
+   background-color: #d5dba9;
    color: white;
    padding: 10px 0;
-   margin-bottom: 20px;
+   margin-bottom: 30px; /*Add more space below the heading */
 }
 
 body {
@@ -28,7 +28,7 @@ body {
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(191, 191, 151, 0.2);
   overflow: hidden;
-  margin-top: 30px;
+  margin-top: 30px; /*Add space above the chat container */
 }
 
 #messages {
