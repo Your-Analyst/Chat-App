@@ -25,14 +25,17 @@ const io = new Server(server);
 
 io.on('connection', (socket) => {
   console.log('A user connected');
+
   socket.on('chat message'), ({ user, message }) => {
 	//Create a timestamp for the message
     const timestamp = new Date().toLocaleTimeString();
     io.emit('chat message', { user, message, timestamp
   });
+
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
+});
 
 //Listen on Provided PORT
 server.listen(PORT, '0.0.0.0', () => {
