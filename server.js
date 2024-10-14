@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 3001;
 //   cert: fs.readFileSync(path.join(__dirname, 'server.cert')),
 // };
 
+// Serve static files (CSS, JS, images) from the current directory
+app.use(express.static(__dirname));
+
 // Serve index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
