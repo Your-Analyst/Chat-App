@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat App</title>
   <!-- Link to the external CSS file -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
- <h1>Welcome to the Chat App</h1>
+  <h1>Welcome to the Chat App</h1>
   <div id="chat-container">
     <ul id="messages"></ul>
     <form id="form" action="">
@@ -30,30 +31,39 @@
     var form = document.getElementById('form');
     var input = document.getElementById('input');
 
+    // Helper function to sanitize user input (prevent XSS)
+    function sanitizeInput(input) {
+      return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Submit form and emit message
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       if (input.value) {
         // Emit the message along with the username
         socket.emit('chat message', { user: username, message: input.value });
-        input.value = '';
+        input.value = '';  // Clear input field
       }
     });
-// Listen for chat messages from the server
+
+    // Listen for chat messages from the server
     socket.on('chat message', function(data) {
       var item = document.createElement('li');
-      item.innerHTML = `[${data.timestamp}] ${data.user}: ${data.message.replace(/\n/g, '<br>')}`;
+      item.innerHTML = `[${data.timestamp}] ${data.user}: ${sanitizeInput(data.message).replace(/\n/g, '<br>')}`;
       document.getElementById('messages').appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
+      autoScroll();  // Call scrolling function when a new message is added
     });
+
+    // Automatically scroll to the bottom when a new message arrives
+    function autoScroll() {
+      var messages = document.getElementById('messages');
+      messages.scrollTop = messages.scrollHeight;
+    }
 
     // Listen for connection messages from the server
     socket.on('connect', () => {
       console.log('Connected to server');
     });
-
-    // Automatically scroll to the bottom when a new message arrives
-    var messages = document.getElementById('messages');
-    messages.scrollTop = messages.scrollHeight;
   </script>
 </body>
 </html>
