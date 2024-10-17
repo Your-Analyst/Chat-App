@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to Redis
 const redisClient = redis.createClient({
-  url: `redis://:${process.env.REDIS_PASSWORD || ''}@${process.env.REDIS_HOST || '172.20.71.113'}:${process.env.REDIS_PORT || 6379}`
+  url: `redis://:${process.env.REDIS_PASSWORD || '1234$$1234'}@${process.env.REDIS_HOST || '172.20.71.113'}:${process.env.REDIS_PORT || 6379}`
 });
 
 // Use async/await for Redis connection, as Redis 4.4 uses Promises
