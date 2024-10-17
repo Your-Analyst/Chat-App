@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat App</title>
-  <!-- Link to the external CSS file -->
+  <!-- Link to the external CSS file and Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -18,11 +18,13 @@
     </form>
   </div>
 
+  <!-- Include the Socket.IO library -->
   <script src="/socket.io/socket.io.js"></script>
+  
   <script>
     var socket = io();
 
-    // Prompt user for a username when they join
+    // Prompt user for a username when they join (temporary until session integration)
     var username = prompt("Enter your username:");
     if (!username) {
       username = "Anonymous";
@@ -41,7 +43,7 @@
       e.preventDefault();
       if (input.value) {
         // Emit the message along with the username
-        socket.emit('chat message', { user: username, message: input.value });
+        socket.emit('chat message', { user: username, message: sanitizeInput(input.value) });
         input.value = '';  // Clear input field
       }
     });
@@ -49,6 +51,7 @@
     // Listen for chat messages from the server
     socket.on('chat message', function(data) {
       var item = document.createElement('li');
+      // Sanitize message and format for HTML display
       item.innerHTML = `[${data.timestamp}] ${data.user}: ${sanitizeInput(data.message).replace(/\n/g, '<br>')}`;
       document.getElementById('messages').appendChild(item);
       autoScroll();  // Call scrolling function when a new message is added

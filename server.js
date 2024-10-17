@@ -16,9 +16,13 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files (like index.html, CSS, JS) from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 // Connect to Redis
 const redisClient = redis.createClient({
-  url: `redis://${process.env.REDIS_HOST || '127.0.0.1'}:${process.env.REDIS_PORT || 6379}`
+  url: `redis://${process.env.REDIS_HOST || '172.20.71.113'}:${process.env.REDIS_PORT || 6379}`
 });
 
 // Use async/await for Redis connection, as Redis 4.4 uses Promises

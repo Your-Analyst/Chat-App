@@ -14,7 +14,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;  /* Set min-height instead of fixed height */
 }
 
 #chat-container {
@@ -24,6 +24,7 @@ body {
   max-height: 600px;  /* Add max height to prevent overflow */
   width: 100%;
   max-width: 600px;
+  min-height: 400px;  /* Added min-height to ensure reasonable height */
   background: white;
   border: 1px solid #bfbf97;
   border-radius: 5px;
@@ -64,6 +65,10 @@ body {
   min-width: 50px;  /* Prevent input from shrinking too much */
 }
 
+#input:focus {
+  outline: 2px solid #007bff;  /* Add focus style for accessibility */
+}
+
 #send-button {
   padding: 10px 15px;
   background-color: #007bff;
@@ -84,3 +89,17 @@ body {
   background-color: #004085;  /* Different color for focus/active states */
 }
 
+/* Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+   #chat-container {
+       max-width: 100%;  /* Take full width on smaller screens */
+   }
+
+   #input {
+       padding: 8px;
+   }
+
+   #send-button {
+       padding: 8px 12px;
+   }
+}
