@@ -9,7 +9,6 @@ const session = require('express-session');
 const redis = require('redis');  // Redis client
 const RedisStore = require('connect-redis').default;  // New way for v6 and above
 
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -18,26 +17,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Connect to Redis
-// Connect to Redis
 const redisClient = redis.createClient({
   url: `redis://${process.env.REDIS_HOST || '127.0.0.1'}:${process.env.REDIS_PORT || 6379}`
 });
 
-redisClient.on('connect', () => {
+// Use async/await for Redis connection, as Redis 4.4 uses Promises
+redisClient.connect().then(() => {
   console.log('Connected to Redis');
-});
-
-redisClient.on('error', (err) => {
+}).catch((err) => {
   console.error('Redis connection error:', err);
 });
 
-// Session setup with Redis store
-app.use(session({
-  store: new RedisStore({ client: redisClient }),
+// Create Redis store for sessions
+const store = new RedisStore({
+  client: redisClient,  // Pass in the Redis client
+});
+
+// Session setup using Redis as the session store
+const sessionMiddleware = session({
+  store: store,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: true,
-}));
+});
+
+// Apply session middleware in Express
+app.use(sessionMiddleware);
 
 // Redis key to store user information
 const USER_PREFIX = 'user:';
@@ -61,26 +66,11 @@ const getUserFromRedis = async (username) => {
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
   try {
-test@test-VirtualBox:~/chat-app$ node server.js
-/home/test/chat-app/server.js:10
-const RedisStore = require('connect-redis')(session);  // Redis store for sessions
-                                           ^
-
-TypeError: require(...) is not a function
-    at Object.<anonymous> (/home/test/chat-app/server.js:10:44)
-    at Module._compile (node:internal/modules/cjs/loader:1364:14)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
-    at Module.load (node:internal/modules/cjs/loader:1203:32)
-    at Module._load (node:internal/modules/cjs/loader:1019:12)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
-    at node:internal/main/run_main_module:28:49
-
-Node.js v18.20.4
     const existingUser = await getUserFromRedis(username);
     if (existingUser) {
       return res.status(400).json({ message: 'Username already exists' });
     }
-    
+
     await saveUserInRedis(username, password);
     req.session.userId = username;  // Use username as the session ID
     res.status(201).json({ message: 'User registered successfully' });
@@ -131,11 +121,15 @@ app.post('/logout', (req, res) => {
   });
 });
 
-// Create HTTP server
+// Create HTTP server and integrate with Express
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Authenticate socket connections
+// Wrap express-session middleware for Socket.IO to share sessions
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+io.use(wrap(sessionMiddleware));
+
+// Authenticate socket connections using session data
 io.use((socket, next) => {
   const session = socket.request.session;
   if (session && session.userId) {
@@ -145,6 +139,7 @@ io.use((socket, next) => {
   }
 });
 
+// Socket.IO connection handler
 io.on('connection', (socket) => {
   console.log('A user connected');
   
@@ -159,6 +154,7 @@ io.on('connection', (socket) => {
   });
 });
 
+// Start the server
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
