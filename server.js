@@ -12,6 +12,11 @@ const RedisStore = require('connect-redis').default;  // New way for v6 and abov
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+console.log('REDIS_HOST:', process.env.REDIS_HOST);
+console.log('REDIS_PORT:', process.env.REDIS_PORT);
+console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
+
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to Redis
 const redisClient = redis.createClient({
-  url: `redis://${process.env.REDIS_HOST || '172.20.71.113'}:${process.env.REDIS_PORT || 6379}`
+  url: `redis://:${process.env.REDIS_PASSWORD || ''}@${process.env.REDIS_HOST || '172.20.71.113'}:${process.env.REDIS_PORT || 6379}`
 });
 
 // Use async/await for Redis connection, as Redis 4.4 uses Promises
@@ -40,7 +45,7 @@ const store = new RedisStore({
 // Session setup using Redis as the session store
 const sessionMiddleware = session({
   store: store,
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  secret: process.env.SESSION_SECRET || 'fallback-random-secret', // Use .env or fallback to something secure
   resave: false,
   saveUninitialized: true,
 });
