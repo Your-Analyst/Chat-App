@@ -16,14 +16,12 @@ console.log('REDIS_HOST:', process.env.REDIS_HOST);
 console.log('REDIS_PORT:', process.env.REDIS_PORT);
 console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
 
-
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files (like index.html, CSS, JS) from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 // Connect to Redis
 const redisClient = redis.createClient({
@@ -120,7 +118,7 @@ const requireAuth = (req, res, next) => {
 
 // Serve chat page only if authenticated
 app.get('/chat', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Log out route

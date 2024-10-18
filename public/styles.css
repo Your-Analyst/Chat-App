@@ -89,6 +89,28 @@ body {
   background-color: #004085;  /* Different color for focus/active states */
 }
 
+/* Error message styling */
+.error-message {
+  color: #ff3860;  /* Red color to indicate error */
+  background-color: #fff5f5;  /* Light red background for visibility */
+  border: 1px solid #ff3860;  /* Red border for emphasis */
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 5px;
+  display: none;  /* Initially hidden */
+  font-size: 0.9em;
+}
+
+/* Show error message when it should be visible */
+.error-message.visible {
+  display: block;
+}
+
+/* Adjust form spacing when an error is visible */
+form {
+  margin-bottom: 20px;
+}
+
 /* Add responsiveness for smaller screens */
 @media (max-width: 768px) {
    #chat-container {
@@ -103,3 +125,4 @@ body {
        padding: 8px 12px;
    }
 }
+

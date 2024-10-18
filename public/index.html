@@ -10,7 +10,28 @@
 </head>
 <body>
   <h1>Welcome to the Chat App</h1>
-  <div id="chat-container">
+
+  <!-- Authentication container -->
+  <div id="auth-container">
+    <h2>Register or Login</h2>
+
+    <!-- Registration Form -->
+    <form id="registerForm">
+      <input type="text" id="registerUsername" placeholder="Choose a username" required>
+      <input type="password" id="registerPassword" placeholder="Choose a password" required>
+      <button type="submit">Register</button>
+    </form>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Enter your username" required>
+      <input type="password" id="loginPassword" placeholder="Enter your password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <!-- Chat container, hidden by default -->
+  <div id="chat-container" style="display:none;">
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" placeholder="Type a message..." />
@@ -20,54 +41,9 @@
 
   <!-- Include the Socket.IO library -->
   <script src="/socket.io/socket.io.js"></script>
-  
-  <script>
-    var socket = io();
 
-    // Prompt user for a username when they join (temporary until session integration)
-    var username = prompt("Enter your username:");
-    if (!username) {
-      username = "Anonymous";
-    }
-
-    var form = document.getElementById('form');
-    var input = document.getElementById('input');
-
-    // Helper function to sanitize user input (prevent XSS)
-    function sanitizeInput(input) {
-      return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    // Submit form and emit message
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (input.value) {
-        // Emit the message along with the username
-        socket.emit('chat message', { user: username, message: sanitizeInput(input.value) });
-        input.value = '';  // Clear input field
-      }
-    });
-
-    // Listen for chat messages from the server
-    socket.on('chat message', function(data) {
-      var item = document.createElement('li');
-      // Sanitize message and format for HTML display
-      item.innerHTML = `[${data.timestamp}] ${data.user}: ${sanitizeInput(data.message).replace(/\n/g, '<br>')}`;
-      document.getElementById('messages').appendChild(item);
-      autoScroll();  // Call scrolling function when a new message is added
-    });
-
-    // Automatically scroll to the bottom when a new message arrives
-    function autoScroll() {
-      var messages = document.getElementById('messages');
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-    // Listen for connection messages from the server
-    socket.on('connect', () => {
-      console.log('Connected to server');
-    });
-  </script>
+  <!-- Link to the external main.js file -->
+  <script src="main.js"></script> <!-- This links the external JavaScript file -->
 </body>
 </html>
 
